@@ -1,0 +1,5 @@
+
+
+
+#define SERVO_STEP_SIZE_ANGLE 1
+#define SERVO_STEP_DELAY_MS 30
