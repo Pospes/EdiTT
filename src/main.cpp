@@ -3,38 +3,65 @@
 
 #include <Servo.h>
 
+#include "inputHandler.h"
+#include "outputHandler.h"
 #include "components/servomotor/servomotor.h"
 #include "components/relay/relay.h"
-#include "components/button/button.h"
 
 
-Servomotor *vyh1, *vyh2, *vyh3, *vyh4, *vyh5, *nav1, *nav2, *nav3, *nav4, *nav5;
-Relay *r1;
-Button *b_vyh1, *b_vyh2, *b_vyh3, *b_vyh4, *b_vyh5, *b_nav1, *b_nav2, *b_nav3, *b_nav4, *b_nav5;
+uint64_t current_time;
 
+InputHandler *input_handler;
+
+OutputHandler *output_handler;
+
+//Servomotor *vyh2 = new Servomotor(11, 35, 148);
+
+//Servomotor *vyh2;
 
 void setup() {
     delay(2000);
-
-    vyh1 = new Servomotor(13, 80, 135);
-    vyh2 = new Servomotor(11, 35, 148);
-    vyh3 = new Servomotor(3, 84, 137); //otoc
-    vyh4 = new Servomotor(14, 100, 140); // otoc
-    vyh5 = new Servomotor(18, 53, 160);
-
-    //nav1 = new Servomotor(45, 10, 50);
-    //nav2 = new Servomotor(43, 70, 110);
-    //nav3 = new Servomotor(22, 110, 150);
-    //nav4 = new Servomotor(44, 70, 110);
-    //nav5 = new Servomotor(42, 100, 140);
-
-    //s1 = new Servomotor(14, 10, 170);
-    //r1 = new Relay(14);
-    //b1 = new Button(46);
+    input_handler = new InputHandler();
+    output_handler = new OutputHandler();
+    //vyh2 = new Servomotor(11, 35, 148);
 }
 
 void loop() {
-  
+    current_time = millis();
+
+    
+
+    // look inputs
+        // process buttons
+
+    // process
+    
+
+
+
+    if (input_handler->b_vyh1->get_state()) {
+        //r1->turn_on();
+        digitalWrite(LED_BUILTIN, HIGH);
+        //output_handler.r1->blink_on(1000);
+        //output_handler.r2->blink_on(750);
+        //output_handler.r3->blink_on(480);
+        output_handler->vyh2->switch_minus();
+    }
+    else {
+        digitalWrite(LED_BUILTIN, LOW);
+        //r1->turn_off();
+        output_handler->vyh2->switch_plus();
+    }
+    
+
+    // do outputs
+        // process servomotors
+        // process relays
+    
+    
+    
+
+/*
     delay(2000);
     vyh1->switch_minus();
     delay(2000);
@@ -57,7 +84,7 @@ void loop() {
     delay(2000);
     vyh5->switch_plus();
     delay(2000);
-    
+*/
 
 
 
@@ -86,6 +113,8 @@ void loop() {
     delay(500);
   }
   */
-    //delay(10);
+
+    output_handler->process_states();
+    delay(30);
 }
 

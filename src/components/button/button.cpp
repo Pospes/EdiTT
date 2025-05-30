@@ -14,6 +14,8 @@ Button::Button(uint16_t pin) {
 }
 
 
+
+
 bool Button::get_state() {
-    return !digitalRead(this->pin);
+    return (this->pin != 0) ? !digitalRead(this->pin) : false;
 }

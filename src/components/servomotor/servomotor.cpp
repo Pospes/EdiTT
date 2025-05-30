@@ -8,17 +8,30 @@
 
 
 
-Servomotor::Servomotor(const uint16_t in_servo_pin, const int min_angle, const int max_angle) {
+Servomotor::Servomotor(const uint16_t in_servo_pin, const int min_angle, const int max_angle) : Device(in_servo_pin) {
 
-    this->pin = in_servo_pin;
-    this->servo.attach(pin);
+    //this->pin = in_servo_pin;
+    this->servo.attach(in_servo_pin);
 
     this->min_angle = min_angle;
     this->max_angle = max_angle;
-    this->mid_angle = (this->min_angle + this->max_angle) / 2;
 
     // get servo in predictable position
     servo.write(max_angle);
+}
+
+Servomotor::Servomotor(const uint16_t in_servo_pin, const int min_angle, const int max_angle, const bool set_inverse) : Device(in_servo_pin) {
+
+    //this->pin = in_servo_pin;
+    this->servo.attach(in_servo_pin);
+
+    this->min_angle = min_angle;
+    this->max_angle = max_angle;
+
+    this->set_inverse = set_inverse;
+
+    // get servo in predictable position
+    servo.write(set_inverse ? min_angle : max_angle);
 }
 
 
@@ -30,7 +43,7 @@ int Servomotor::read_angle() {
 void Servomotor::step_plus() {
     if (read_angle() < this->max_angle) {
         this->servo.write(read_angle() + SERVO_STEP_SIZE_ANGLE);
-        delay(SERVO_STEP_DELAY_MS);
+        //delay(SERVO_STEP_DELAY_MS);
     }
 }
 
@@ -38,7 +51,7 @@ void Servomotor::step_plus() {
 void Servomotor::step_minus() {
     if (read_angle() > this->min_angle) {
         this->servo.write(read_angle() - SERVO_STEP_SIZE_ANGLE);
-        delay(SERVO_STEP_DELAY_MS);
+        //delay(SERVO_STEP_DELAY_MS);
     }
 }
 
@@ -46,30 +59,53 @@ void Servomotor::step_minus() {
 
 
 
-void Servomotor::write_angle(int target_angle) {
-    if (target_angle > this->max_angle || target_angle < this->min_angle) {
-        Serial.println("[ERROR]: Write angle invalid");
-        return;
+
+
+void Servomotor::process_state() {
+    switch (this->fsm_state) {
+        case SER_FSM_PLUS:
+            if (this->servo_position == PLUS)
+                break;
+
+            //if (!servo.attached())
+            //    servo.attach(this->pin);
+
+            step_plus();
+            this->servo_position = BETWEEN;
+            if (read_angle() >= this->max_angle) {
+                this->in_default_position = true;
+                this->servo_position = PLUS;
+                this->fsm_state = SER_FSM_IDLE;
+            }
+            break;
+
+        case SER_FSM_MINUS:
+            if (this->servo_position == MINUS)
+                break;
+
+            //if (!servo.attached())
+            //    servo.attach(this->pin);
+                
+            step_minus();
+            this->servo_position = BETWEEN;
+            if (read_angle() <= this->min_angle) {
+                this->in_default_position = false;
+                this->servo_position = MINUS;
+                this->fsm_state = SER_FSM_IDLE;
+            }
+            break;
+        
+        case SER_FSM_IDLE:
+        default:
+            //if (servo.attached())
+            //    servo.detach();
+            break;
     }
-
-    if (!servo.attached())
-        servo.attach(this->pin);
-
-    int current_angle = read_angle();
-    
-    while (current_angle < target_angle) {
-        step_plus();
-        current_angle = read_angle();
-    }
-
-    while (current_angle > target_angle) {
-        step_minus();
-        current_angle = read_angle();
-    }
-
-    delay(400);
-    servo.detach();
 }
+
+
+
+
 
 
 void Servomotor::debug(const uint16_t plus_button, const uint16_t minus_button) {
@@ -96,36 +132,21 @@ void Servomotor::debug(const uint16_t plus_button, const uint16_t minus_button) 
 
 
 
-bool Servomotor::switch_plus() {
-    if (!this->default_position) {
-        write_angle(this->max_angle);
 
-        this->default_position = true;
-        return true;
-    }
-    return false;
+
+
+void Servomotor::switch_plus() {
+    this->fsm_state = this->set_inverse ? SER_FSM_MINUS : SER_FSM_PLUS;
+    //this->in_default_position = true;
 }
 
 
 
-bool Servomotor::switch_minus() {
-    if (this->default_position) {
-        write_angle(this->min_angle);
-
-        this->default_position = false;
-        return true;
-    }
-    return false;
-}
-    
-
-void Servomotor::switch_middle() {
-    write_angle(this->mid_angle);
-        
-    this->default_position = false;
+void Servomotor::switch_minus() {
+    this->fsm_state = this->set_inverse ? SER_FSM_PLUS : SER_FSM_MINUS;
+    //this->in_default_position = false;
 }
 
 
-bool Servomotor::get_position() {
-    return this->default_position;
-}
+
+
