@@ -6,7 +6,7 @@
 #include "../device.h"
 
 
-extern uint64_t current_time;
+
 
 typedef enum relay_fsm {
     OFF,
@@ -22,7 +22,6 @@ class Relay : public Device {
         bool relay_state = false;
         //
 
-        uint64_t timer = 0;
         uint64_t timer_period_ms = 0;
 
         void on();

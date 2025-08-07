@@ -1,5 +1,9 @@
 
 
+#define FZ1_POWER
 
 #define SERVO_STEP_SIZE_ANGLE 1
 #define SERVO_STEP_DELAY_MS 30
+#define SERVO_CMD_TIMEOUT_MS 5000
+
+#define SPEAKER1_VOLUME 3  // range 0-30

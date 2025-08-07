@@ -67,15 +67,21 @@ void Servomotor::process_state() {
             if (this->servo_position == PLUS)
                 break;
 
-            //if (!servo.attached())
-            //    servo.attach(this->pin);
+            if (this->timer == 0)
+                this->timer = current_time;
+
+            if (!servo.attached())
+                servo.attach(this->pin);
 
             step_plus();
             this->servo_position = BETWEEN;
-            if (read_angle() >= this->max_angle) {
+            if ((read_angle() >= this->max_angle) || (current_time >= this->timer + SERVO_CMD_TIMEOUT_MS)) { // So servo doesnt switch for infinite time
+                Serial.println(F("Switch switching +"));
+                this->timer = 0;
                 this->in_default_position = true;
                 this->servo_position = PLUS;
                 this->fsm_state = SER_FSM_IDLE;
+                this->servo.detach();
             }
             break;
 
@@ -83,15 +89,21 @@ void Servomotor::process_state() {
             if (this->servo_position == MINUS)
                 break;
 
-            //if (!servo.attached())
-            //    servo.attach(this->pin);
+            if (this->timer == 0)
+                this->timer = current_time;
+
+            if (!servo.attached())
+                servo.attach(this->pin);
                 
             step_minus();
             this->servo_position = BETWEEN;
-            if (read_angle() <= this->min_angle) {
+            if ((read_angle() <= this->min_angle) || (current_time >= this->timer + SERVO_CMD_TIMEOUT_MS)) { // Servo doesnt switch for infinite time
+                Serial.println(F("Switch switching -"));
+                this->timer = 0;
                 this->in_default_position = false;
                 this->servo_position = MINUS;
                 this->fsm_state = SER_FSM_IDLE;
+                this->servo.detach();
             }
             break;
         

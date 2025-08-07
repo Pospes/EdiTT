@@ -7,6 +7,9 @@
 #include "components/device.h"
 
 
+extern uint64_t current_time;
+
+
 typedef enum servomotor_fsm {
     SER_FSM_IDLE,  // todo NE?
     SER_FSM_PLUS,

@@ -15,50 +15,43 @@ InputHandler *input_handler;
 
 OutputHandler *output_handler;
 
-//Servomotor *vyh2 = new Servomotor(11, 35, 148);
 
-//Servomotor *vyh2;
 
 void setup() {
-    delay(2000);
+    //delay(2000);
+    Serial.begin(9600);
     input_handler = new InputHandler();
     output_handler = new OutputHandler();
-    //vyh2 = new Servomotor(11, 35, 148);
 }
 
 void loop() {
     current_time = millis();
 
-    
+    input_handler->b_vyh1->get_state() ? output_handler->vyh1->switch_minus() : output_handler->vyh1->switch_plus();
+    input_handler->b_nav1->get_state() ? output_handler->nav1->switch_minus() : output_handler->nav1->switch_plus();
+#ifdef FZ1_POWER 
+    input_handler->b_vyh2->get_state() ? output_handler->vyh2->switch_minus() : output_handler->vyh2->switch_plus();
+    input_handler->b_vyh3->get_state() ? output_handler->vyh3->switch_minus() : output_handler->vyh3->switch_plus();
+    input_handler->b_vyh4->get_state() ? output_handler->vyh4->switch_minus() : output_handler->vyh4->switch_plus();
 
-    // look inputs
-        // process buttons
+    if (input_handler->b_vyh5->get_state()) {
+        output_handler->r4->turn_on();
+        output_handler->vyh5->switch_minus();
 
-    // process
-    
-
-
-
-    if (input_handler->b_vyh1->get_state()) {
-        //r1->turn_on();
-        digitalWrite(LED_BUILTIN, HIGH);
-        //output_handler.r1->blink_on(1000);
-        //output_handler.r2->blink_on(750);
-        //output_handler.r3->blink_on(480);
-        output_handler->vyh2->switch_minus();
+        input_handler->ble->connect();
     }
     else {
-        digitalWrite(LED_BUILTIN, LOW);
-        //r1->turn_off();
-        output_handler->vyh2->switch_plus();
+        output_handler->r4->turn_off();
+        output_handler->vyh5->switch_plus();
     }
     
-
-    // do outputs
-        // process servomotors
-        // process relays
+    input_handler->b_nav2->get_state() ? output_handler->nav2->switch_minus() : output_handler->nav2->switch_plus();
+    input_handler->b_nav3->get_state() ? output_handler->nav3->switch_minus() : output_handler->nav3->switch_plus();
+    input_handler->b_nav4->get_state() ? output_handler->nav4->switch_minus() : output_handler->nav4->switch_plus();
+    input_handler->b_nav5->get_state() ? output_handler->nav5->switch_minus() : output_handler->nav5->switch_plus();
+#endif
     
-    
+    input_handler->ble->receive();
     
 
 /*
