@@ -25,7 +25,7 @@ class OutputHandler {
         Relay *r6 = new Relay(48);
     #endif
 
-        Servomotor *vyh1 = new Servomotor(11, 80, 135, true);
+        Servomotor *vyh1 = new Servomotor(11, 80, 135);
         Servomotor *nav1 = new Servomotor(44, 20, 60);
     #ifdef FZ1_POWER
         Servomotor *vyh2 = new Servomotor(13, 52, 148);

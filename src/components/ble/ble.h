@@ -28,6 +28,7 @@ class BleInterface {
 
         void read_if_available();
         bool get_ble_buffer_dirty_flag();
+        void set_ble_buffer_dirty_flag(const bool arg);
         uint8_t* get_signal_recv_buffer();
 
 

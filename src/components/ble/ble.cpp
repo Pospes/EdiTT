@@ -65,8 +65,15 @@ void BleInterface::connect() {
 */
 
 void BleInterface::mirrorTest() {
-    if (this->serial.available()) 
-        this->serial.write(this->serial.read());
+    if (this->serial.available()) {
+        uint8_t buffer[5] = {0};
+        this->serial.readBytes(buffer, 5);
+
+        for (int x = 0; x < 5; x++)
+            Serial.print(buffer[x], HEX);
+
+        Serial.println();
+    }
 
     if (Serial.available()) 
         this->serial.write(Serial.read());
@@ -75,7 +82,17 @@ void BleInterface::mirrorTest() {
 
 void BleInterface::read_if_available() {
     if (this->serial.available()) {
-        this->serial.readBytes(this->signal_recv_buffer, 5);
+        auto len = this->serial.readBytes(this->signal_recv_buffer, 5);
+        Serial.print("[BLE]: read ");
+        Serial.print(len);
+        Serial.println(" bytes:");
+
+        for (int x = 0; x < 5; x++) {
+            Serial.print("Signal: ");
+            Serial.print(x+1);
+            Serial.print(": ");
+            Serial.println(this->signal_recv_buffer[x], HEX);
+        }
 
         this->ble_buffer_dirty_flag = true;
     }
@@ -85,6 +102,10 @@ void BleInterface::read_if_available() {
 
 bool BleInterface::get_ble_buffer_dirty_flag() {
     return this->ble_buffer_dirty_flag;
+}
+
+void BleInterface::set_ble_buffer_dirty_flag(const bool arg) {
+    this->ble_buffer_dirty_flag = arg;
 }
 
 uint8_t* BleInterface::get_signal_recv_buffer() {

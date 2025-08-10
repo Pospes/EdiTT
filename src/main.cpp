@@ -61,7 +61,7 @@ void loop() {
 
     input_handler->ble->read_if_available();
 
-    if (input_handler->ble->get_ble_buffer_dirty_flag()) {
+    //if (input_handler->ble->get_ble_buffer_dirty_flag()) {
         uint8_t* signal_ble_recv_buffer = input_handler->ble->get_signal_recv_buffer();
 
         if (SignalLogic::k1_route_set())
@@ -74,7 +74,10 @@ void loop() {
             SignalLogic::set_expected_signal(signal_ble_recv_buffer[3]);
         else if (SignalLogic::k6_route_set())
             SignalLogic::set_expected_signal(signal_ble_recv_buffer[4]);
-    }
+
+        //Serial.println("Route set");
+    //    input_handler->ble->set_ble_buffer_dirty_flag(false);
+    //}
     
 
 /*

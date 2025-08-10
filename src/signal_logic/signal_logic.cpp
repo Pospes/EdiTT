@@ -44,27 +44,30 @@ bool SignalLogic::k6_route_set() {
 
 // TODO
 void SignalLogic::go_default_aspect() {
-    Serial.print("[LOG]: signal going DEFAULT");
+    //Serial.println("[LOG]: signal going DEFAULT");
 }
 
 void SignalLogic::go_expect_green() {
-    Serial.print("[LOG]: signal going GREEN");
+    //Serial.println("[LOG]: signal going GREEN");
 }
 
 void SignalLogic::go_expect_40() {
-    Serial.print("[LOG]: signal going 40");
+    //Serial.println("[LOG]: signal going 40");
+    output_handler->r2->blink_on(1000);
 }
 
 void SignalLogic::go_expect_60() {
-    Serial.print("[LOG]: signal going 60");
+    //Serial.println("[LOG]: signal going 60");
+    output_handler->r2->blink_on(600);
 }
 
 void SignalLogic::go_expect_80() {
-    Serial.print("[LOG]: signal going 80");
+    //Serial.println("[LOG]: signal going 80");
+    output_handler->r6->blink_on(1000);
 }
 
 void SignalLogic::go_expect_100() {
-    Serial.print("[LOG]: signal going 100");
+    //Serial.println("[LOG]: signal going 100");
 }
 
 
