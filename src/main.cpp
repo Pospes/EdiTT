@@ -7,6 +7,7 @@
 #include "outputHandler.h"
 #include "components/servomotor/servomotor.h"
 #include "components/relay/relay.h"
+#include "signal_logic/signal_logic.h"
 
 
 uint64_t current_time;
@@ -14,6 +15,13 @@ uint64_t current_time;
 InputHandler *input_handler;
 
 OutputHandler *output_handler;
+
+
+
+
+
+
+
 
 
 
@@ -37,8 +45,6 @@ void loop() {
     if (input_handler->b_vyh5->get_state()) {
         output_handler->r4->turn_on();
         output_handler->vyh5->switch_minus();
-
-        input_handler->ble->connect();
     }
     else {
         output_handler->r4->turn_off();
@@ -51,7 +57,24 @@ void loop() {
     input_handler->b_nav5->get_state() ? output_handler->nav5->switch_minus() : output_handler->nav5->switch_plus();
 #endif
     
-    input_handler->ble->receive();
+    //input_handler->ble->mirrorTest();
+
+    input_handler->ble->read_if_available();
+
+    if (input_handler->ble->get_ble_buffer_dirty_flag()) {
+        uint8_t* signal_ble_recv_buffer = input_handler->ble->get_signal_recv_buffer();
+
+        if (SignalLogic::k1_route_set())
+            SignalLogic::set_expected_signal(signal_ble_recv_buffer[0]);
+        else if (SignalLogic::k2_route_set())
+            SignalLogic::set_expected_signal(signal_ble_recv_buffer[1]);
+        else if (SignalLogic::k3_route_set())
+            SignalLogic::set_expected_signal(signal_ble_recv_buffer[2]);
+        else if (SignalLogic::k4_route_set())
+            SignalLogic::set_expected_signal(signal_ble_recv_buffer[3]);
+        else if (SignalLogic::k6_route_set())
+            SignalLogic::set_expected_signal(signal_ble_recv_buffer[4]);
+    }
     
 
 /*

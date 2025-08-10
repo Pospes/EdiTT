@@ -19,7 +19,7 @@ class InputHandler {
         Button *b_nav4 = new Button(30);
         Button *b_nav5 = new Button(31);
 
-        Ble *ble = new Ble(16, 17);  // 16=TX, 17=RX
+        BleInterface *ble = new BleInterface(Serial2);  // 16=TX, 17=RX
 
 
 

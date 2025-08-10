@@ -161,4 +161,6 @@ void Servomotor::switch_minus() {
 
 
 
-
+bool Servomotor::is_set_plus() {
+    return this->in_default_position;
+}

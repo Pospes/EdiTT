@@ -4,11 +4,11 @@
 #include "ble.h"
 
 
-Ble::Ble(const uint8_t &tx, const uint8_t &rx) {
+BleInterface::BleInterface(HardwareSerial &serial) : serial(serial) {
     
     //this->serial = new SoftwareSerial(tx, rx);
 
-    Serial2.begin(9600);
+    this->serial.begin(9600);
     
     //this->serial->begin(9600);
     //this->serial->println("BLE OK SER");
@@ -53,8 +53,8 @@ Ble::Ble(const uint8_t &tx, const uint8_t &rx) {
     */
 }
 
-
-void Ble::connect() {
+/*
+void BleInterface::connect() {
     static bool x = false;
 
     if (!x) {
@@ -62,43 +62,33 @@ void Ble::connect() {
         Serial2.print("AT\r\n");
     }
 }
+*/
 
-
-void Ble::receive() {
-    
-    if (Serial2.available()) 
-        Serial.write(Serial2.read());
+void BleInterface::mirrorTest() {
+    if (this->serial.available()) 
+        this->serial.write(this->serial.read());
 
     if (Serial.available()) 
-        Serial2.write(Serial.read());
-
-
-    char bleData;
-    /*
-    if (this->serial->available() > 0) {
-        bleData = this->serial->read();
-
-        switch (bleData) {
-            case 0x00:
-                logger->println("0 acc");
-                break;
-            
-            case 0x01:
-                logger->println("1 acc");
-                break;
-
-            case '\r':
-            case '\n':
-            default:
-                logger->println("Unk cmd");
-                break;
-        }
-    }
-    */
-
-  
-
-
-
-
+        this->serial.write(Serial.read());
 }
+
+
+void BleInterface::read_if_available() {
+    if (this->serial.available()) {
+        this->serial.readBytes(this->signal_recv_buffer, 5);
+
+        this->ble_buffer_dirty_flag = true;
+    }
+}
+
+
+
+bool BleInterface::get_ble_buffer_dirty_flag() {
+    return this->ble_buffer_dirty_flag;
+}
+
+uint8_t* BleInterface::get_signal_recv_buffer() {
+    return this->signal_recv_buffer;
+}
+
+

@@ -54,6 +54,8 @@ class Servomotor : public Device {
         void debug(uint16_t plus_button, uint16_t minus_button);
         void switch_plus();
         void switch_minus();
+
+        bool is_set_plus();
 };
 
 

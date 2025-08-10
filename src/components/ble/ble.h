@@ -9,18 +9,26 @@
 
 
 
-class Ble {
+class BleInterface {
     
     private:
-        SoftwareSerial *serial;
         
+        HardwareSerial &serial;
+        uint8_t signal_recv_buffer[64] = {0};
+        bool ble_buffer_dirty_flag = false;
+
 
 
 
     public:
-        Ble(const uint8_t &tx, const uint8_t &rx);
+        BleInterface(HardwareSerial &serial);
 
-        void connect();
-        void receive();        
+        //void connect();
+        void mirrorTest();
+
+        void read_if_available();
+        bool get_ble_buffer_dirty_flag();
+        uint8_t* get_signal_recv_buffer();
+
 
 };
