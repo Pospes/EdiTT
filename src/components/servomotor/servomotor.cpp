@@ -78,7 +78,7 @@ void Servomotor::process_state() {
             if ((read_angle() >= this->max_angle) || (current_time >= this->timer + SERVO_CMD_TIMEOUT_MS)) { // So servo doesnt switch for infinite time
                 Serial.println(F("Switch switching +"));
                 this->timer = 0;
-                this->in_default_position = true;
+                this->in_default_position = this->set_inverse ? false : true;
                 this->servo_position = PLUS;
                 this->fsm_state = SER_FSM_IDLE;
                 this->servo.detach();
@@ -100,7 +100,7 @@ void Servomotor::process_state() {
             if ((read_angle() <= this->min_angle) || (current_time >= this->timer + SERVO_CMD_TIMEOUT_MS)) { // Servo doesnt switch for infinite time
                 Serial.println(F("Switch switching -"));
                 this->timer = 0;
-                this->in_default_position = false;
+                this->in_default_position = this->set_inverse ? true : false;
                 this->servo_position = MINUS;
                 this->fsm_state = SER_FSM_IDLE;
                 this->servo.detach();

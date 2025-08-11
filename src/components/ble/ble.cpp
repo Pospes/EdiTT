@@ -93,20 +93,12 @@ void BleInterface::read_if_available() {
             Serial.print(": ");
             Serial.println(this->signal_recv_buffer[x], HEX);
         }
-
-        this->ble_buffer_dirty_flag = true;
     }
 }
 
 
 
-bool BleInterface::get_ble_buffer_dirty_flag() {
-    return this->ble_buffer_dirty_flag;
-}
 
-void BleInterface::set_ble_buffer_dirty_flag(const bool arg) {
-    this->ble_buffer_dirty_flag = arg;
-}
 
 uint8_t* BleInterface::get_signal_recv_buffer() {
     return this->signal_recv_buffer;

@@ -53,21 +53,22 @@ void SignalLogic::go_expect_green() {
 
 void SignalLogic::go_expect_40() {
     //Serial.println("[LOG]: signal going 40");
-    output_handler->r2->blink_on(1000);
+    output_handler->r2->blink_on(SIGNAL_SLOW_BLINK_FREQ);
 }
 
 void SignalLogic::go_expect_60() {
     //Serial.println("[LOG]: signal going 60");
-    output_handler->r2->blink_on(600);
+    output_handler->r2->blink_on(SIGNAL_FAST_BLINK_FREQ);
 }
 
 void SignalLogic::go_expect_80() {
     //Serial.println("[LOG]: signal going 80");
-    output_handler->r6->blink_on(1000);
+    output_handler->r6->blink_on(SIGNAL_SLOW_BLINK_FREQ);
 }
 
 void SignalLogic::go_expect_100() {
     //Serial.println("[LOG]: signal going 100");
+    output_handler->r5->blink_on(SIGNAL_FAST_BLINK_FREQ);
 }
 
 

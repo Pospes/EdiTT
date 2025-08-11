@@ -10,19 +10,6 @@ extern OutputHandler *output_handler;
 
 
 
-const uint8_t zav_table[5][5] = {
-/*         switch 1  2  3  4  5
-From/to rail 1:*/{1, 1, 0, 0, 0}, /* 
-From/to rail 2:*/{2, 0, 2, 0 ,0}, /*
-From/to rail 3:*/{1, 2, 0, 0, 2}, /*
-From/to rail 4:*/{2, 0, 1, 2, 0}, /*
-From/to rail 5:*/{2, 0, 1, 1, 0}  /*
-/*
-0 = indifferent
-1 = plus,
-2 = minus
-*/
-};
 
 
 typedef enum signal_speed {

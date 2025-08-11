@@ -15,7 +15,6 @@ class BleInterface {
         
         HardwareSerial &serial;
         uint8_t signal_recv_buffer[64] = {0};
-        bool ble_buffer_dirty_flag = false;
 
 
 

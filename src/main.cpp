@@ -61,24 +61,20 @@ void loop() {
 
     input_handler->ble->read_if_available();
 
-    //if (input_handler->ble->get_ble_buffer_dirty_flag()) {
-        uint8_t* signal_ble_recv_buffer = input_handler->ble->get_signal_recv_buffer();
+    uint8_t* signal_ble_recv_buffer = input_handler->ble->get_signal_recv_buffer();
 
-        if (SignalLogic::k1_route_set())
-            SignalLogic::set_expected_signal(signal_ble_recv_buffer[0]);
-        else if (SignalLogic::k2_route_set())
-            SignalLogic::set_expected_signal(signal_ble_recv_buffer[1]);
-        else if (SignalLogic::k3_route_set())
-            SignalLogic::set_expected_signal(signal_ble_recv_buffer[2]);
-        else if (SignalLogic::k4_route_set())
-            SignalLogic::set_expected_signal(signal_ble_recv_buffer[3]);
-        else if (SignalLogic::k6_route_set())
-            SignalLogic::set_expected_signal(signal_ble_recv_buffer[4]);
+    if (SignalLogic::k1_route_set())  // TODO and signal is set
+        SignalLogic::set_expected_signal(signal_ble_recv_buffer[0]);
+    else if (SignalLogic::k2_route_set())
+        SignalLogic::set_expected_signal(signal_ble_recv_buffer[1]);
+    else if (SignalLogic::k3_route_set())
+        SignalLogic::set_expected_signal(signal_ble_recv_buffer[2]);
+    else if (SignalLogic::k4_route_set())
+        SignalLogic::set_expected_signal(signal_ble_recv_buffer[3]);
+    else if (SignalLogic::k6_route_set())
+        SignalLogic::set_expected_signal(signal_ble_recv_buffer[4]);
 
-        //Serial.println("Route set");
-    //    input_handler->ble->set_ble_buffer_dirty_flag(false);
-    //}
-    
+    // todo kdy vyslat IK sign8l
 
 /*
     delay(2000);
